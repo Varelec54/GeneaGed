@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GénéaGed - Saisie GEDCOM</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- BARRE SUPÉRIEURE -->
+  <header class="topbar">
+    <span class="logo">GénéaGed</span>
+    <button id="btn-new">Nouveau</button>
+    <button id="btn-open">Ouvrir (.ged)</button>
+    <button id="btn-save" disabled>Enregistrer (Ctrl+S)</button>
+    <button id="btn-save-as" disabled>Enregistrer sous...</button>
+    <span id="file-info" style="margin-left:auto; font-size:12px; color:#666;">Aucun fichier ouvert</span>
+  </header>
+
+  <!-- FENÊTRE MODALE DE BIENVENUE -->
+  <div id="welcome-modal" class="modal-overlay">
+    <div class="modal-card">
+      <h2>Bienvenue dans GénéaGed</h2>
+      <p>Logiciel de saisie généalogique léger et compatible GEDCOM.</p>
+      <button id="modal-btn-new" class="btn-primary">Créer un nouveau fichier</button>
+      <button id="modal-btn-open" class="btn-secondary">Ouvrir un fichier GEDCOM</button>
+    </div>
+  </div>
+
+  <!-- FENÊTRE MODALE DE CONJOINT -->
+  <div id="spouse-modal" class="modal-overlay hidden">
+    <div class="modal-card" style="max-width: 400px; text-align: left;">
+      <h3 style="margin-top:0;">Ajouter un(e) conjoint(e)</h3>
+      <p style="font-size:14px; color:#555;">Sélectionnez la personne à unir :</p>
+      <div style="margin-bottom: 15px;">
+        <select id="spouse-select" style="width:100%; padding:8px; font-size:14px; box-sizing:border-box;"></select>
+      </div>
+      <div style="display:flex; justify-content:flex-end; gap:10px;">
+        <button id="spouse-modal-cancel" type="button" style="padding:6px 12px; cursor:pointer;">Annuler</button>
+        <button id="spouse-modal-confirm" type="button" class="btn-primary" style="padding:6px 12px; cursor:pointer;">Valider l'union</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- FENÊTRE MODALE D'AJOUT DE PARENT -->
+  <div id="parent-modal" class="modal-overlay hidden">
+    <div class="modal-card" style="max-width: 420px; text-align: left;">
+      <h3 id="parent-modal-title" style="margin-top:0;">Ajouter un parent</h3>
+      
+      <div style="margin-bottom: 15px; background: #f5f5f5; padding: 10px; border-radius: 4px;">
+        <label for="parent-select" style="font-weight:bold; display:block; margin-bottom:5px;">Choisir une personne existante :</label>
+        <select id="parent-select" style="width:100%; padding:8px; font-size:14px; box-sizing:border-box;"></select>
+        <button id="parent-modal-confirm-existing" type="button" class="btn-primary" style="margin-top:10px; width:100%; padding:6px; cursor:pointer;">Associer cette personne</button>
+      </div>
+
+      <div style="text-align:center; font-weight:bold; margin: 10px 0; color:#777;">— OU —</div>
+
+      <div style="background: #f5f5f5; padding: 10px; border-radius: 4px;">
+        <button id="parent-modal-create-new" type="button" style="width:100%; padding:8px; cursor:pointer; background:#4CAF50; color:white; border:none; border-radius:4px; font-weight:bold;">+ Créer une nouvelle personne</button>
+      </div>
+
+      <div style="display:flex; justify-content:flex-end; margin-top:15px;">
+        <button id="parent-modal-cancel" type="button" style="padding:6px 12px; cursor:pointer;">Annuler</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Ajouter un Enfant -->
+  <div id="child-modal" class="modal hidden">
+    <div class="modal-content">
+      <h3>Ajouter un enfant</h3>
+      
+      <div style="margin-bottom: 15px;">
+        <label><strong>1. Mode d'ajout :</strong></label><br>
+        <select id="child-mode-select" style="width: 100%; padding: 6px; margin-top: 5px;">
+          <option value="new">Créer un nouvel enfant</option>
+          <option value="existing">Lier un enfant existant dans la liste</option>
+        </select>
+      </div>
+      
+      <div id="child-existing-group" style="display: none; margin-bottom: 15px;">
+        <label><strong>Sélectionner l'enfant existant :</strong></label><br>
+        <select id="child-select" style="width: 100%; padding: 6px; margin-top: 5px;"></select>
+      </div>    
+      
+      <!-- Choix du second parent -->
+      <div style="margin-bottom: 15px;">
+        <label><strong>2. Sélectionner le second parent (optionnel) :</strong></label>
+        <select id="other-parent-select" style="width: 100%; padding: 6px; margin-top: 5px;"></select>
+      </div>
+
+      <div style="display: flex; flex-direction: column; gap: 8px;">
+        <button type="button" id="child-modal-confirm" style="background:#0066cc; color:white; border:none; padding:8px; border-radius:4px; cursor:pointer;">
+          Valider l'ajout
+        </button>
+        <button type="button" id="child-modal-cancel" style="background:#ccc; border:none; padding:8px; border-radius:4px; cursor:pointer;">
+          Annuler
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- INTERFACE PRINCIPALE -->
+  <main id="app-container" class="app-container hidden">
+    
+    <aside class="sidebar">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+        <h3 id="indi-count" style="margin:0;">Individus (0)</h3>
+        <button id="btn-add-indi" type="button" style="padding:4px 8px; cursor:pointer;">+ Ajouter</button>
+      </div>
+      <input type="text" id="search-input" placeholder="Rechercher..." style="width:100%; margin-bottom:10px; padding:6px; box-sizing:border-box;">
+      <div id="indi-list" class="list-container"></div>
+    </aside>
+
+    <section class="editor-panel">
+      <div id="no-selection-message" class="placeholder-msg">Sélectionnez ou créez un individu pour commencer.</div>
+
+      <div id="editor-content" class="hidden" style="padding:20px;">
+        
+        <!-- Identité -->
+        <fieldset style="margin-bottom:15px; border:1px solid #ccc; padding:10px; border-radius:4px;">
+          <legend style="display:flex; justify-content:space-between; width:100%;">
+            <strong>Identité</strong>
+          </legend>
+          <div style="display:flex; justify-content:flex-end; margin-bottom:10px;">
+            <button type="button" id="btn-delete-indi" style="background:#d9534f; color:white; border:none; padding:5px 10px; border-radius:3px; cursor:pointer; font-weight:bold;">
+              Supprimer cet individu
+            </button>
+          </div>
+          <div style="display:flex; gap:10px; margin-bottom:10px;">
+            <div style="flex:1;">
+              <label>Nom :</label><br>
+              <input type="text" id="indi-nom" style="width:100%; padding:5px; box-sizing:border-box;">
+            </div>
+            <div style="flex:1;">
+              <label>Prénom :</label><br>
+              <input type="text" id="indi-prenom" style="width:100%; padding:5px; box-sizing:border-box;">
+            </div>
+            <div style="width:120px;">
+              <label>Sexe :</label><br>
+              <select id="indi-sexe" style="width:100%; padding:5px;">
+                <option value="M">Masculin</option>
+                <option value="F">Féminin</option>
+                <option value="U">Inconnu</option>
+              </select>
+            </div>
+          </div>
+        </fieldset>
+
+        <!-- Événements vitaux -->
+        <fieldset style="margin-bottom:15px; border:1px solid #ccc; padding:10px; border-radius:4px;">
+          <legend><strong>Événements vitaux</strong></legend>
+          <div style="display:flex; gap:10px; margin-bottom:10px;">
+            <div style="flex:1;">
+              <label>Date de naissance :</label>
+              <input type="text" id="indi-birth-date" placeholder="ex: 12 JAN 1920" style="width:100%; padding:5px; box-sizing:border-box;">
+            </div>
+            <div style="flex:1;">
+              <label>Lieu de naissance :</label>
+              <input type="text" id="indi-birth-place" style="width:100%; padding:5px; box-sizing:border-box;">
+            </div>
+          </div>
+          <div style="display:flex; gap:10px;">
+            <div style="flex:1;">
+              <label>Date de décès :</label>
+              <input type="text" id="indi-death-date" placeholder="ex: 05 MAR 1995" style="width:100%; padding:5px; box-sizing:border-box;">
+            </div>
+            <div style="flex:1;">
+              <label>Lieu de décès :</label>
+              <input type="text" id="indi-death-place" style="width:100%; padding:5px; box-sizing:border-box;">
+            </div>
+          </div>
+        </fieldset>
+
+        <!-- Parents -->
+        <fieldset style="margin-bottom:15px; border:1px solid #ccc; padding:10px; border-radius:4px;">
+          <legend><strong>Parents (Ascendants)</strong></legend>
+          <div id="parents-list"></div>
+        </fieldset>
+
+        <!-- Frères & Sœurs -->
+        <fieldset style="margin-bottom:15px; border:1px solid #ccc; padding:10px; border-radius:4px;">
+          <legend><strong>Frères & Sœurs</strong></legend>
+          <div id="siblings-list"></div>
+        </fieldset>
+
+        <!-- Unions -->
+        <fieldset style="margin-bottom:15px; border:1px solid #ccc; padding:10px; border-radius:4px;">
+          <legend><strong>Unions & Conjoints</strong></legend>
+          <div id="unions-list"></div>
+          <button type="button" id="btn-add-spouse" style="padding:6px 12px; cursor:pointer;">+ Ajouter un(e) conjoint(e)</button>
+        </fieldset>
+
+        <!-- Enfants -->
+        <fieldset style="margin-bottom:15px; border:1px solid #ccc; padding:10px; border-radius:4px;">
+          <legend><strong>Enfants (Descendants)</strong></legend>
+          <div id="children-list"></div>
+          <button type="button" id="btn-add-child" style="padding:6px 12px; cursor:pointer; margin-top:8px;">+ Ajouter un enfant</button>
+        </fieldset>
+
+        <!-- ZONE D'AFFICHAGE DE L'ARBRE GÉNÉALOGIQUE -->
+        <div id="genealogy-tree-container" class="genealogy-tree-container"></div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- CHARGEMENT DES SCRIPTS -->
+  <script src="js/types.js"></script>
+  <script src="js/fileService.js"></script>
+  <script src="js/gedcomEngine.js?v=11"></script>
+  <script src="js/store.js?v=11"></script>
+  <script src="js/ui.js?v=11"></script>
+  <script src="js/app.js?v=11"></script>
+</body>
+</html>
