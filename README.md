@@ -20,10 +20,10 @@ Contrairement aux logiciels de généalogie complets et complexes, GénéaGed se
 ## 📂 Structure du projet
 
 GeneaGed
---index.html          # Page principale de l'application
---ccs/
+*index.html          # Page principale de l'application
+*ccs/
     - style.css       # Feuilles de styles CSS
--- js/
+* js/
     - app.js          # Point d'entrée de l'application
     - fileService.js  # Service d'import/export de fichiers GEDCOM
     - gedcomEngine.js # Moteur de parsing et génération GEDCOM
