@@ -22,15 +22,25 @@ Contrairement aux logiciels de généalogie complets et complexes, GénéaGed se
 text
 Geneaged/
 ├── index.html          # Page principale de l'application
+|
 ├── css/
-│   └── style.css       # Feuilles de styles CSS
+    |
+    └── style.css       # Feuilles de styles CSS
+|
 └── js/
+    |
     ├── app.js          # Point d'entrée de l'application
+    |
     ├── fileService.js  # Service d'import/export de fichiers GEDCOM
+    |
     ├── gedcomEngine.js # Moteur de parsing et génération GEDCOM
+    |
     ├── store.js        # Gestion de l'état des données (individus, familles)
+    |
     ├── types.js        # Définition des structures de données
+    |
     └── ui.js           # Gestion de l'interface utilisateur et rendu de l'arbre
+    
     
 ## 📄 Licence & Crédits
 
