@@ -19,6 +19,18 @@ Contrairement aux logiciels de généalogie complets et complexes, GénéaGed se
 
 ## 📂 Structure du projet
 
+GeneaGed
+--index.html          # Page principale de l'application
+--ccs/
+    - style.css       # Feuilles de styles CSS
+-- js/
+    - app.js          # Point d'entrée de l'application
+    - fileService.js  # Service d'import/export de fichiers GEDCOM
+    - gedcomEngine.js # Moteur de parsing et génération GEDCOM
+    - store.js        # Gestion de l'état des données (individus, familles)
+    - types.js        # Définition des structures de donnée
+    - ui.js           # Gestion de l'interface utilisateur et rendu de l'arbre
+
 text
 Geneaged/
 ├── index.html          # Page principale de l'application
