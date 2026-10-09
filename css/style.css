@@ -1,0 +1,429 @@
+:root {
+  --bg-color: #f4f6f8;
+  --panel-bg: #ffffff;
+  --border-color: #e1e4e8;
+  --primary-color: #2b6cb0;
+  --primary-hover: #2c5282;
+  --text-color: #2d3748;
+  --text-muted: #718096;
+}
+
+* { 
+  box-sizing: border-box; 
+  margin: 0; 
+  padding: 0; 
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; 
+}
+
+body { 
+  background-color: var(--bg-color); 
+  color: var(--text-color); 
+  display: flex; 
+  flex-direction: column; 
+  height: 100vh; 
+  overflow: hidden; 
+}
+
+/* Topbar */
+.topbar { 
+  background-color: var(--panel-bg); 
+  border-bottom: 1px solid var(--border-color); 
+  padding: 10px 20px; 
+  display: flex; 
+  align-items: center; 
+  gap: 20px; 
+}
+.logo { 
+  font-weight: bold; 
+  font-size: 1.2rem; 
+  color: var(--primary-color); 
+}
+.actions { 
+  display: flex; 
+  gap: 10px; 
+}
+.file-info { 
+  margin-left: auto; 
+  font-size: 0.85rem; 
+  color: var(--text-muted); 
+}
+
+/* Boutons */
+.btn { 
+  padding: 6px 12px; 
+  border: 1px solid var(--border-color); 
+  background: #fff; 
+  border-radius: 4px; 
+  cursor: pointer; 
+  font-size: 0.9rem; 
+}
+.btn:hover { 
+  background: #f7fafc; 
+}
+.btn:disabled { 
+  opacity: 0.5; 
+  cursor: not-allowed; 
+}
+.btn-primary { 
+  background: var(--primary-color); 
+  color: #fff; 
+  border: none; 
+}
+.btn-primary:hover { 
+  background: var(--primary-hover); 
+}
+.btn-small { 
+  font-size: 0.8rem; 
+  padding: 4px 8px; 
+  margin-top: 5px; 
+}
+.btn-large { 
+  padding: 12px 20px; 
+  font-size: 1rem; 
+}
+
+/* Modal */
+.modal-overlay { 
+  position: fixed; 
+  inset: 0; 
+  background: rgba(0,0,0,0.5); 
+  display: flex; 
+  align-items: center; 
+  justify-content: center; 
+  z-index: 100; 
+}
+.modal-card { 
+  background: #fff; 
+  padding: 40px; 
+  border-radius: 8px; 
+  text-align: center; 
+  max-width: 450px; 
+  width: 100%; 
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1); 
+}
+.modal-card h1 { 
+  margin-bottom: 10px; 
+  color: var(--primary-color); 
+}
+.modal-card p { 
+  margin-bottom: 25px; 
+  color: var(--text-muted); 
+}
+.modal-buttons { 
+  display: flex; 
+  flex-direction: column; 
+  gap: 10px; 
+}
+
+/* Layout principal */
+.main-content { 
+  display: flex; 
+  flex: 1; 
+  overflow: hidden; 
+}
+
+.app-container {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+  height: calc(100vh - 50px);
+}
+
+.sidebar { 
+  width: 300px; 
+  background: var(--panel-bg); 
+  border-right: 1px solid var(--border-color); 
+  padding: 15px; 
+  display: flex; 
+  flex-direction: column; 
+  gap: 10px; 
+  flex-shrink: 0;
+  height: 100%;
+}
+
+.input-search { 
+  padding: 8px; 
+  border: 1px solid var(--border-color); 
+  border-radius: 4px; 
+  width: 100%; 
+}
+
+.indi-list, #indi-list { 
+  list-style: none; 
+  overflow-y: auto; 
+  flex: 1; 
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  background: #fff;
+  margin-top: 10px;
+}
+.indi-list li { 
+  padding: 8px 10px; 
+  border-bottom: 1px solid #edf2f7; 
+  cursor: pointer; 
+  border-radius: 4px; 
+}
+.indi-list li:hover { 
+  background: #edf2f7; 
+}
+.indi-list li.active { 
+  background: #ebf8ff; 
+  font-weight: bold; 
+  color: var(--primary-color); 
+}
+
+/* Details & Editor Panel */
+.details-section, .editor-panel { 
+  flex: 1; 
+  padding: 20px; 
+  overflow-y: auto; 
+  height: 100%;
+  box-sizing: border-box;
+}
+
+.empty-state { 
+  text-align: center; 
+  margin-top: 50px; 
+  color: var(--text-muted); 
+}
+
+.card { 
+  background: var(--panel-bg); 
+  border: 1px solid var(--border-color); 
+  border-radius: 6px; 
+  padding: 20px; 
+  display: flex; 
+  flex-direction: column; 
+  gap: 20px; 
+  width: 100% !important; 
+  max-width: 1400px !important; 
+  margin: 0 auto; 
+}
+.card-header { 
+  display: flex; 
+  justify-content: space-between; 
+  align-items: center; 
+  border-bottom: 1px solid var(--border-color); 
+  padding-bottom: 10px; 
+}
+.badge { 
+  background: #e2e8f0; 
+  padding: 2px 8px; 
+  border-radius: 4px; 
+  font-size: 0.8rem; 
+  font-family: monospace; 
+}
+
+/* Fieldsets */
+.section-group { 
+  border: 1px solid var(--border-color); 
+  border-radius: 4px; 
+  padding: 12px; 
+}
+.section-group legend { 
+  font-weight: bold; 
+  padding: 0 6px; 
+  color: var(--primary-color); 
+  font-size: 0.9rem; 
+}
+.form-grid { 
+  display: grid; 
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); 
+  gap: 12px; 
+}
+.form-field { 
+  display: flex; 
+  flex-direction: column; 
+  gap: 4px; 
+  font-size: 0.85rem; 
+}
+.form-field input, .form-field select { 
+  padding: 6px; 
+  border: 1px solid var(--border-color); 
+  border-radius: 4px; 
+}
+
+.parents-grid { 
+  display: grid; 
+  grid-template-columns: 1fr 1fr; 
+  gap: 10px; 
+}
+.slot { 
+  background: #f7fafc; 
+  border: 1px dashed var(--border-color); 
+  border-radius: 4px; 
+  padding: 10px; 
+  text-align: center; 
+}
+
+.hidden { 
+  display: none !important; 
+}
+
+/* --- ARBRE GENEALOGIQUE EN 5 COLONNES --- */
+.tree-columns-wrapper {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 10px;
+  width: 100%;
+  align-items: start;
+}
+
+.tree-column {
+  background: #fdfdfd;
+  border: 1px solid #dcdcdc;
+  border-radius: 6px;
+  padding: 8px;
+  box-sizing: border-box;
+  min-width: 0;
+}
+
+.tree-column h4 {
+  font-size: 11px;
+  text-align: center;
+  color: #333;
+  margin: 0 0 8px 0;
+  border-bottom: 2px solid #0066cc;
+  padding-bottom: 4px;
+}
+
+.tree-node {
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  padding: 6px;
+  margin-bottom: 6px;
+  font-size: 10px;
+}
+
+.tree-node.active-node {
+  border-color: #0066cc;
+  background-color: #f0f7ff;
+}
+
+.node-name {
+  font-weight: bold;
+  color: #0066cc;
+  text-decoration: none;
+  display: block;
+  margin-bottom: 2px;
+}
+
+.node-details {
+  color: #555;
+  font-size: 9px;
+  line-height: 1.2;
+}
+
+/* --- ARBRE GÉNÉALOGIQUE EN CASCADE PAR GÉNÉRATIONS --- */
+.genealogy-tree-container {
+  margin-top: 30px;
+  border-top: 2px solid #ccc;
+  padding-top: 20px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.tree-generation-row {
+  margin-bottom: 25px;
+  text-align: center;
+  width: 100%;
+}
+
+.tree-generation-title {
+  font-size: 12px;
+  font-weight: bold;
+  color: #555;
+  text-transform: uppercase;
+  margin-bottom: 10px;
+  letter-spacing: 0.5px;
+}
+
+/* Alignement horizontal strict des cartes */
+.tree-row-cards {
+  display: flex !important;
+  flex-direction: row !important;
+  flex-wrap: nowrap !important;
+  justify-content: center !important;
+  align-items: flex-start !important;
+  gap: 15px !important;
+  width: 100% !important;
+}
+
+/* Style de base des cartes */
+.tree-card {
+  background: #fff;
+  border: 1px solid #dcdcdc;
+  border-radius: 6px;
+  padding: 10px 15px;
+  width: 220px !important;
+  flex: 0 0 220px !important;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+  text-align: left;
+  box-sizing: border-box;
+}
+
+/* Individu principal */
+.tree-card.active-node {
+  border-color: #2b6cb0;
+  background-color: #f0f7ff;
+  border-width: 2px;
+}
+
+/* Conjoint(e) / Belle-famille */
+.tree-card.spouse-node, .tree-card.inlaw-node {
+  border-color: #d53f8c;
+  background-color: #fff5f7;
+}
+
+/* Style spécifique pour les Petits-enfants */
+.tree-card.grandchild-card {
+  background: #f7fafc;
+  border: 1px dashed #a0aec0;
+  width: 190px !important;
+  flex: 0 0 190px !important;
+}
+
+.card-name {
+  font-weight: bold;
+  font-size: 11px;
+  color: #2b6cb0;
+  text-decoration: none;
+  display: block;
+  margin-bottom: 4px;
+  text-transform: uppercase;
+}
+
+.inlaw-node .card-name {
+  color: #d53f8c;
+}
+
+.card-details {
+  font-size: 10px;
+  color: #666;
+  line-height: 1.3;
+  overflow: visible !important;
+}
+
+/* Groupe de branche familiale (Enfant + ses petits-enfants) */
+.family-branch-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: #fdfdfd;
+  border: 1px solid #cbd5e0;
+  border-radius: 8px;
+  padding: 10px;
+  margin: 5px;
+}
+
+.grandchildren-sublist {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 10px;
+  padding-top: 8px;
+  border-top: 1px dashed #e2e8f0;
+  width: 100%;
+  align-items: center;
+}
